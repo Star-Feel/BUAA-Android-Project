@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    >
+    <ImageView
+        android:id="@+id/star_item_image"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/background_register"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/cycle_shape"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/star_item_title"
+        android:layout_toRightOf="@id/star_item_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textColor="#000000"
+        android:text="跑步"
+        android:textSize="17dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginLeft="15dp" />
+
+    <TextView
+        android:id="@+id/star_item_type"
+        android:layout_toRightOf="@id/star_item_title"
+        android:layout_width="28dp"
+        android:layout_height="18dp"
+        android:gravity="center_vertical"
+        android:textColor="#000000"
+        android:background="@drawable/text_shape_blue"
+        android:text="室外"
+        android:paddingLeft="5dp"
+        android:textSize="9dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginLeft="8dp" />
+
+    <RelativeLayout
+        android:id="@+id/relative_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/star_item_image"
+        android:layout_marginLeft="15dp"
+        android:layout_below="@+id/star_item_title">
+        <TextView
+            android:id="@+id/desc_pre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已运动"
+            android:textColor="#6b6b6b"
+            android:textSize="12dp"
+            android:layout_marginTop="7dp"
+            />
+        <TextView
+            android:id="@+id/desc_mid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/desc_pre"
+            android:textSize="12dp"
+            android:textColor="#e5b24f"
+            android:layout_marginTop="7dp"
+            android:text="10"/>
+        <TextView
+            android:id="@+id/desc_last"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/desc_mid"
+            android:layout_marginTop="7dp"
+            android:textSize="12dp"
+            android:text="次"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/star_item_heart"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/heart"
+        android:layout_marginRight="10dp"
+        />
+
+    <ImageView
+        android:id="@+id/star_item_go"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/plane"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/star_item_heart"
+        android:layout_marginRight="10dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="#ECEEF0"
+        android:layout_height="1dp"/>
+
+</RelativeLayout>

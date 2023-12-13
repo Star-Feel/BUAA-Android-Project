@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color_choose">
+
+    <ImageView
+        android:layout_marginTop="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_run" />
+
+    <Chronometer
+        android:id="@+id/timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:format="00:00:00"
+        android:gravity="center"
+        android:textSize="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="210dp"/>
+
+    <ImageButton
+        android:id="@+id/btn_start"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:layout_marginLeft="70dp"
+        android:background="@drawable/button_circle"
+        android:src="@drawable/ic_start_button" />
+    <ImageButton
+        android:id="@+id/btn_stop"
+        android:layout_toRightOf="@id/btn_start"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:layout_marginLeft="15dp"
+        android:visibility="gone"
+        android:background="@drawable/button_circle"
+        android:src="@drawable/ic_stop_button" />
+
+    <ImageButton
+        android:id="@+id/btn_pause"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:layout_marginLeft="70dp"
+        android:visibility="invisible"
+        android:background="@drawable/button_circle"
+        android:src="@drawable/ic_pause_button" />
+
+</RelativeLayout>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_shape">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="选择性别"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        android:paddingTop="12dp"
+        android:paddingLeft="20dp"
+        android:background="#9ec2f7" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        >
+        <RadioGroup
+            android:id="@+id/radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:padding="5dp"
+            android:layout_marginTop="40dp"
+            >
+            <RadioButton
+                android:id="@+id/radio_1"
+                android:layout_width="80dp"
+                android:paddingLeft="10dp"
+                android:layout_height="35dp"
+                android:textSize="20dp"
+                android:text="男"
+                android:background="@drawable/radio_button"
+                android:layout_marginRight="30dp"
+                />
+            <RadioButton
+                android:id="@+id/radio_2"
+                android:textSize="20dp"
+                android:layout_width="80dp"
+                android:paddingLeft="10dp"
+                android:layout_height="35dp"
+                android:background="@drawable/radio_button"
+                android:text="女"
+                android:layout_marginLeft="30dp"
+                />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_below="@+id/radio_button"
+            android:text="确定"
+            android:layout_centerHorizontal="true"
+            android:textColor="#ffffff"
+            android:background="@drawable/button_buaa_style"
+            android:layout_gravity="center_horizontal"
+            android:textSize="18dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp" />
+    </RelativeLayout>
+</RelativeLayout>

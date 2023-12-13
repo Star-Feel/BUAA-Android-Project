@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- activity_blog_detail.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".blog.BlogDetailActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="📰 帖子详情"
+                        android:textColor="@color/black"
+                        android:textSize="22sp" />
+
+                </com.google.android.material.appbar.MaterialToolbar>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <!-- Card for Title and Author -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/titleAuthorCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/appBarLayout2"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- Title TextView -->
+                    <TextView
+                        android:id="@+id/titleTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:textColor="@color/black"
+                        android:textSize="30sp" />
+
+                    <!-- Author TextView -->
+                    <TextView
+                        android:id="@+id/authorTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/titleTextView"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="16dp"
+                        android:gravity="end"
+                        android:padding="16dp"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="15sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/authorTextView"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginRight="25dp"
+                        android:background="#a1a1a1" />
+
+                    <!-- Post Image -->
+                    <ImageView
+                        android:id="@+id/postImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/authorTextView"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:contentDescription="Post Image"
+                        android:scaleType="centerInside" />
+
+                    <!-- Content TextView -->
+                    <TextView
+                        android:id="@+id/contentTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/postImageView"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="22sp" />
+
+                    <!-- Post Time TextView -->
+                    <TextView
+                        android:id="@+id/postTimeTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/contentTextView"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="16dp"
+                        android:gravity="end"
+                        android:padding="16dp"
+                        android:textColor="@android:color/darker_gray" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Card for Add Comment Section -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/addCommentCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleAuthorCard"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp">
+
+                <RelativeLayout
+                    android:id="@+id/addCommentView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- Comment EditText -->
+                    <EditText
+                        android:id="@+id/commentEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_toStartOf="@+id/addCommentButton"
+                        android:hint="添加评论"
+                        android:padding="8dp" />
+
+                    <!-- Add Comment Button -->
+                    <ImageButton
+                        android:id="@+id/addCommentButton"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:backgroundTint="@color/white"
+                        android:onClick="onAddCommentButtonClick"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/comment_add"
+                        tools:ignore="MissingConstraints" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+
+
+        <!-- Card for Comment ListView -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/addCommentCard"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="8dp">
+
+            <ListView
+                android:id="@+id/commentListView"
+                android:layout_width="match_parent"
+                android:layout_height="640dp"
+                android:background="@android:color/background_light"
+                android:padding="16dp" />
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</ScrollView>

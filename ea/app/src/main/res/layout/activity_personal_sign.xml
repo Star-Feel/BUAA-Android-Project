@@ -1,0 +1,82 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fcfcfc">
+    <RelativeLayout
+        android:id="@+id/top_relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <RelativeLayout
+            android:id="@+id/setting_title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#ffffff">
+            <ImageView
+                android:id="@+id/return_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/return_"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="个性签名"
+                android:layout_marginTop="10dp"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative_edit"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/setting_title_bar"
+            android:layout_height="60dp">
+
+            <EditText
+                android:id="@+id/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="17dp"
+                android:maxLength="20"
+                android:paddingTop="15dp"
+                android:paddingBottom="10dp"
+                android:background="@drawable/edit_text_background"
+                android:paddingLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:textColor="#000000"
+                android:layout_marginLeft="20dp"
+                android:inputType="textMultiLine"
+                android:hint="在此输入自己的个性签名 ~"/>
+
+            <TextView
+                android:id="@+id/rest_length_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15"
+                android:textSize="14dp"
+                android:layout_marginBottom="9dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="30dp"
+                />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:text="保存"
+            android:textSize="17dp"
+            android:textColor="#ffffff"
+            android:background="@drawable/save_button"
+            android:layout_below="@id/relative_edit"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="20dp"/>
+
+    </RelativeLayout>
+</ScrollView>

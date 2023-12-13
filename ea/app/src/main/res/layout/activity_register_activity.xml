@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<!--    android:background="@drawable/background_register"-->
+
+    <EditText
+        android:id="@+id/reg_inputUserName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="输入用户名"
+        android:layout_marginLeft="20dp"
+        android:textColorHint="#afafaf"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/desc"
+        android:drawableLeft="@drawable/user"
+        android:drawablePadding="15dp"
+        />
+
+    <EditText
+        android:id="@+id/reg_inputPassword"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="输入密码"
+        android:password="true"
+        android:layout_marginLeft="20dp"
+        android:textColorHint="#afafaf"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/reg_inputUserName"
+        android:drawableLeft="@drawable/password"
+        android:drawablePadding="15dp"
+        />
+
+    <EditText
+        android:id="@+id/reg_inputPassword_again"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="请确认密码"
+        android:password="true"
+        android:layout_marginLeft="20dp"
+        android:textColorHint="#afafaf"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/reg_inputPassword"
+        android:drawableLeft="@drawable/password"
+        android:drawablePadding="15dp"
+        />
+<!--    <EditText-->
+<!--        android:id="@+id/reg_inputName"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:hint="输入真实姓名"-->
+<!--        android:layout_marginLeft="20dp"-->
+<!--        android:textColorHint="#61D96C"-->
+<!--        android:layout_marginRight="40dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_below="@+id/reg_inputPassword"-->
+<!--        android:drawableLeft="@drawable/password"-->
+<!--        android:drawablePadding="15dp"-->
+<!--        />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/reg_inputIdCard"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:hint="输入身份证号"-->
+<!--        android:layout_marginLeft="20dp"-->
+<!--        android:textColorHint="#61D96C"-->
+<!--        android:layout_marginRight="40dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_below="@+id/reg_inputName"-->
+<!--        android:drawableLeft="@drawable/password"-->
+<!--        android:drawablePadding="15dp"-->
+<!--        />-->
+
+<!--    <RadioGroup-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:id="@+id/sel"-->
+<!--        android:layout_marginLeft="95dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_below="@id/reg_inputIdCard">-->
+
+<!--        <RadioButton-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="患者"-->
+<!--            android:textSize="21dp"-->
+<!--            android:layout_marginRight="20dp"-->
+<!--            android:textColor="#77CF8C"-->
+<!--            />-->
+
+<!--        <RadioButton-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="医生"-->
+<!--            android:textSize="21dp"-->
+<!--            android:textColor="#77CF8C"-->
+<!--            />-->
+<!--    </RadioGroup>-->
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="230dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/reg_inputPassword_again"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="90dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_buaa_style"
+        android:text="注册"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp" />
+
+<!--    <RelativeLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginTop="100dp"-->
+<!--        android:layout_height="wrap_content">-->
+
+    <ImageView
+        android:id="@+id/pic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/buaa_logn"
+        android:layout_marginTop="70dp"
+        android:layout_centerHorizontal="true"
+        />
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="诊\n疗\n宝"-->
+<!--            android:textColor="#000000"-->
+<!--            android:textSize="30dp"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:layout_toRightOf="@+id/pic"-->
+<!--            />-->
+
+
+<!--    </RelativeLayout>-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/desc"
+        android:layout_below="@+id/pic"
+        android:layout_marginTop="10dp"
+        android:text="北航运动助手注册"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="#323232"
+        android:layout_centerHorizontal="true"
+        />
+
+
+</RelativeLayout>

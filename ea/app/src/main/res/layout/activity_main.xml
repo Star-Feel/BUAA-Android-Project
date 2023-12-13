@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <ImageView
+        android:id="@+id/buaa_logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/buaa_logn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="北航运动助手登录"
+        android:layout_below="@id/buaa_logo"
+        android:layout_centerHorizontal="true"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:id="@+id/title"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:id="@+id/inputUserName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="40dp"
+        android:drawableLeft="@drawable/user"
+        android:drawablePadding="15dp"
+        android:hint="请输入用户名"
+        android:textColorHint="#A1A1A1" />
+
+    <EditText
+        android:id="@+id/inputPassword"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="请输入密码"
+        android:layout_centerHorizontal="true"
+        android:password="true"
+        android:layout_marginLeft="20dp"
+        android:textColorHint="#A1A1A1"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/inputUserName"
+        android:drawableLeft="@drawable/password"
+        android:drawablePadding="15dp"
+        />
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/inputPassword"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/button_buaa_style"
+        android:text="登   录"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login"
+        android:layout_centerHorizontal="true"
+        >
+
+        <TextView
+            android:id="@+id/text_myzh"
+            android:text="没有账号？"
+            android:textSize="13dp"
+            android:textColor="#A1A1A1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            />
+
+        <TextView
+            android:id="@+id/text_djzc"
+            android:text="点击注册"
+            android:textSize="13dp"
+            android:textColor="#7A94E6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/text_myzh"
+            />
+
+    </RelativeLayout>
+
+<!--    <TextView-->
+<!--        android:id="@+id/text_dsf"-->
+<!--        android:text="———  使用第三方账号登录  ———"-->
+<!--        android:textSize="13dp"-->
+<!--        android:textColor="#7A94E6"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="185dp"-->
+<!--        android:layout_marginLeft="60dp"-->
+<!--        android:layout_below="@+id/login"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        />-->
+
+<!--    <RelativeLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/text_dsf"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        >-->
+<!--        <ImageView-->
+<!--            android:id="@+id/vx"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/vxlogin"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            />-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/qq"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/qqlogin"-->
+<!--            android:layout_toRightOf="@id/vx"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginLeft="60dp"-->
+<!--            />-->
+
+<!--    </RelativeLayout>-->
+<!--
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:text="微信号/qq号/登录"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"/>
+-->
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_above="@+id/inputUserName"
+        android:layout_marginTop="30dp">
+        <!--        <ImageView-->
+        <!--            android:layout_width="150dp"-->
+        <!--            android:layout_height="150dp"-->
+        <!--            android:layout_marginTop="30dp"-->
+        <!--            android:layout_centerHorizontal="true"-->
+        <!--            android:src="@drawable/zhuomuniao2" />-->
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

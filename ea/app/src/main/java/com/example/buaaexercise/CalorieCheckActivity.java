@@ -1,0 +1,1045 @@
+package com.example.buaaexercise;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+class CalorieInfoItem {
+    private String foodName;
+    private String calorieInfo; // 160大卡
+
+    public CalorieInfoItem(String name, String calorieInfo) {
+        this.foodName = name;
+        this.calorieInfo = calorieInfo;
+    }
+}
+
+public class CalorieCheckActivity extends AppCompatActivity {
+    private static HashMap<String, ArrayList<CalorieInfoItem>> calorieInfo; // <蔬菜, (青菜:, )>
+    private static HashMap<String, String> foodAdvice; // <食物类型, 类型建议>
+    private static HashMap<String, ArrayList<String>> typeMapFoodNames; // <蔬菜, (...)>
+    private static HashMap<String, String> foodNameMapCalorie;
+    private static HashMap<String, Integer> typeMapImageId;
+    private static final String HEALTH_TIPS = "    人体每天需要摄入的热量与年龄、身高、体重以及劳动强度有关，成人正常体重者完全卧床时，每日每千克理想体重需热量为15-20千卡，休息状态下为25-30千卡，轻体力劳动为30-35千卡，中度体力劳动为35-40千卡，重体力劳动为40千卡以上。膳食中碳水化合物供给量应占总热量的50%-60%，蛋白质摄入量应占15%-20%，脂肪的摄入量应占25%-30%，其中饱和脂肪酸摄入量小于总热量的10%，胆固醇摄入量小于每天300mg。";
+    private ImageView returnButton;
+    private Button knownButton;
+    private Spinner selectTypeSpinner;
+    private Spinner selectFoodSpinner;
+    private TextView calorieText;
+    private TextView tipsText;
+    private ArrayAdapter<String> typeSpinnerAdapter;
+    private ArrayAdapter<String> foodSpinnerAdapter;
+    private ArrayList<String> types;
+    private ImageView foodTypeLogo;
+    private TextView healthTips;
+
+    static {
+        calorieInfo = new HashMap<>();
+        foodAdvice = new HashMap<>();
+        typeMapFoodNames = new HashMap<>();
+        foodNameMapCalorie = new HashMap<>();
+        typeMapImageId = new HashMap<>();
+        addCalorieInfo();
+    }
+
+    public void initAttribute() {
+        selectFoodSpinner = findViewById(R.id.food_spinner);
+        selectTypeSpinner = findViewById(R.id.type_spinner);
+        returnButton = findViewById(R.id.return_button);
+        knownButton = findViewById(R.id.know_button);
+        calorieText = findViewById(R.id.calorie_value);
+        tipsText = findViewById(R.id.tips_content);
+        foodTypeLogo = findViewById(R.id.food_type_logo);
+        healthTips = findViewById(R.id.health_tips);
+        // 为两个spinner设置内容
+        // 第一个spinner的素材是永恒不变的
+        String initType = initTypeSpinnerContent();
+        String initFood = initFoodSpinnerContent();
+        setImageCalorieTips(initType, initFood);
+    }
+
+    public String initTypeSpinnerContent() {
+        types = new ArrayList<>(foodAdvice.keySet());
+        this.typeSpinnerAdapter = new ArrayAdapter<String>(this, R.layout.my_spinner_item, types);
+//        this.typeSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        selectTypeSpinner.setAdapter(typeSpinnerAdapter);
+        // 初始选项为[0]号元素
+        selectTypeSpinner.setSelection(0);
+        return typeSpinnerAdapter.getItem(0);
+    }
+
+    public void setImageCalorieTips(String type, String foodName) {
+        // 根据两个参数设置ui内容
+        calorieText.setText(foodNameMapCalorie.get(foodName));
+        tipsText.setText(foodAdvice.get(type));
+        foodTypeLogo.setImageResource(typeMapImageId.get(type));
+    }
+
+    public String initFoodSpinnerContent() {
+        String type = typeSpinnerAdapter.getItem(0);
+        // ArrayList<CalorieInfoItem> calorieInfoItems = calorieInfo.get(type);
+        ArrayList<String> foodNames = typeMapFoodNames.get(type);
+        this.foodSpinnerAdapter = new ArrayAdapter<>(this, R.layout.my_spinner_item, foodNames);
+//        this.foodSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        selectFoodSpinner.setAdapter(foodSpinnerAdapter);
+        selectFoodSpinner.setSelection(0);
+        return foodSpinnerAdapter.getItem(0);
+    }
+
+    public void updateFoodAdapter(String type) {
+        foodSpinnerAdapter = new ArrayAdapter<>(this, R.layout.my_spinner_item, typeMapFoodNames.get(type));
+//        foodSpinnerAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        selectFoodSpinner.setAdapter(foodSpinnerAdapter);
+        selectFoodSpinner.setSelection(0);
+    }
+
+    public void setOnClickListeners() {
+        returnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        knownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+//        selectTypeSpinner.setOnItemSelectedListener(new A);
+
+        healthTips.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 弹出弹窗 TODO
+                Tools.showOneButtonDialog("健康小贴士", HEALTH_TIPS, CalorieCheckActivity.this, "我知道了");
+            }
+        });
+
+        selectTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // 更新选择食物的spinner的素材
+                String type = (String) selectTypeSpinner.getSelectedItem();
+                // 更新food列表并将初始项设置为0项
+                updateFoodAdapter(type);
+                String name = (String) selectFoodSpinner.getSelectedItem();
+                setImageCalorieTips(type, name);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        selectFoodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // 更新食物卡路里文本框
+                String foodName = (String) selectFoodSpinner.getSelectedItem();
+                calorieText.setText(foodNameMapCalorie.get(foodName));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+//        selectTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                // 更新选择食物的spinner的素材
+//                String type = (String) selectTypeSpinner.getSelectedItem();
+//                // 更新food列表并将初始项设置为0项
+//                updateFoodAdapter(type);
+//                String name = (String) selectFoodSpinner.getSelectedItem();
+//                setImageCalorieTips(type, name);
+//            }
+//        });
+//
+//        selectFoodSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                // 更新食物卡路里文本框
+//                String foodName = (String) selectFoodSpinner.getSelectedItem();
+//                calorieText.setText(foodNameMapCalorie.get(foodName));
+//            }
+//        });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_calorie_check);
+        initAttribute();
+        setOnClickListeners();
+    }
+
+    public static void addCalorieInfo() {
+        typeMapImageId.put("主食", R.drawable.zhushi);
+        typeMapImageId.put("主饭", R.drawable.zhufan);
+        typeMapImageId.put("蔬菜类", R.drawable.vegetables);
+        typeMapImageId.put("肉类蛋类", R.drawable.roudan);
+        typeMapImageId.put("水果", R.drawable.fruit);
+        typeMapImageId.put("零食", R.drawable.lingshi);
+        typeMapImageId.put("冷饮", R.drawable.lengyin);
+        typeMapImageId.put("甜点", R.drawable.tiandian);
+        typeMapImageId.put("饮料", R.drawable.yinliao);
+        typeMapImageId.put("高热量", R.drawable.hanbao);
+
+        foodAdvice.put("主食", "长期不摄入主食会造成代谢紊乱、营养不良，主食中增加谷类食物和薯类及杂豆类摄入能获得更多健康效应哦～");
+        foodAdvice.put("主饭", "带炒的饭或者面的热量都很高，想减肥的孩纸还是尽量少吃煎炒类的食物最好！");
+        foodAdvice.put("蔬菜类", "蔬菜类的热量是在金字塔的低端，富含纤维，无论有没有减肥，都建议多吃。");
+        foodAdvice.put("肉类蛋类", "肉类和蛋类食物都含有饱和脂肪和胆固醇,过量摄入可能增加心脑血管疾病的风险哦～  建议每天摄入肉类约100-150克,蛋类约为1-2个。");
+        foodAdvice.put("水果", "水果热量基本是最低的，而且富含维生素，味道酸酸甜甜，平时应该要多吃水果，还能美容养颜。");
+        foodAdvice.put("零食", "在热量等级中，零食可是大忌，小小的零食包含热量和脂肪，每次开吃往往是吃得停不下来，这也是为什么有些人总喊减肥总是减不下去的原因之一了。");
+        foodAdvice.put("冷饮", "夏天大家都喜欢和冷饮，甚至是喜欢吃雪糕等奶油类，建议可以自己打果汁放进冰箱，用来代替市面的冷饮解解馋也是不错的选择。");
+        foodAdvice.put("甜点", "甜点是包含脂肪的食物，越是甜的甜点越是要少点吃，不过，甜的食物是可以带来幸福的感觉的，偶尔吃一点也可以原谅。");
+        foodAdvice.put("饮料", "看了就知道为什么大家都说喝茶是最能瘦身的了，因为热量低！");
+        foodAdvice.put("高热量", "肯德基、麦当劳、匹萨克，是大家平时最喜欢去光顾的歪果仁店，食物炸的偏多，炸、炒、煎的食物在热量排行版上基本排在了金字塔的顶端，想要保持身材不发胖，还是尽量少吃这些垃圾食品吧！");
+
+        calorieInfo.put("主食", new ArrayList<CalorieInfoItem>());
+        calorieInfo.put("主饭", new ArrayList<CalorieInfoItem>());
+        calorieInfo.put("蔬菜类", new ArrayList<CalorieInfoItem>());
+        calorieInfo.put("肉类蛋类", new ArrayList<CalorieInfoItem>());
+        calorieInfo.put("水果", new ArrayList<CalorieInfoItem>());
+        calorieInfo.put("零食", new ArrayList<CalorieInfoItem>());
+        calorieInfo.put("冷饮", new ArrayList<CalorieInfoItem>());
+        calorieInfo.put("甜点", new ArrayList<CalorieInfoItem>());
+        calorieInfo.put("饮料", new ArrayList<CalorieInfoItem>());
+        calorieInfo.put("高热量", new ArrayList<CalorieInfoItem>());
+
+        typeMapFoodNames.put("主食", new ArrayList<String>());
+        typeMapFoodNames.put("主饭", new ArrayList<String>());
+        typeMapFoodNames.put("蔬菜类", new ArrayList<String>());
+        typeMapFoodNames.put("肉类蛋类", new ArrayList<String>());
+        typeMapFoodNames.put("水果", new ArrayList<String>());
+        typeMapFoodNames.put("零食", new ArrayList<String>());
+        typeMapFoodNames.put("冷饮", new ArrayList<String>());
+        typeMapFoodNames.put("甜点", new ArrayList<String>());
+        typeMapFoodNames.put("饮料", new ArrayList<String>());
+        typeMapFoodNames.put("高热量", new ArrayList<String>());
+
+        calorieInfo.get("主食").add(new CalorieInfoItem("白饭(140g)", "210大卡"));
+        typeMapFoodNames.get("主食").add("白饭(140g)");
+        foodNameMapCalorie.put("白饭(140g)", "210大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("白馒头（一个）", "280大卡"));
+        typeMapFoodNames.get("主食").add("白馒头（一个）");
+        foodNameMapCalorie.put("白馒头（一个）", "280大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("煎饼（100g）", "333大卡"));
+        typeMapFoodNames.get("主食").add("煎饼（100g）");
+        foodNameMapCalorie.put("煎饼（100g）", "333大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("肉包子（一个）", "250大卡"));
+        typeMapFoodNames.get("主食").add("肉包子（一个）");
+        foodNameMapCalorie.put("肉包子（一个）", "250大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("水饺（十个）", "420大卡"));
+        typeMapFoodNames.get("主食").add("水饺（十个）");
+        foodNameMapCalorie.put("水饺（十个）", "420大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("咖哩饺（一个）", "245大卡"));
+        typeMapFoodNames.get("主食").add("咖哩饺（一个）");
+        foodNameMapCalorie.put("咖哩饺（一个）", "245大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("猪肉水饺（一个）", "40大卡"));
+        typeMapFoodNames.get("主食").add("猪肉水饺（一个）");
+        foodNameMapCalorie.put("猪肉水饺（一个）", "40大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("蛋饼（一份）", "255大卡"));
+        typeMapFoodNames.get("主食").add("蛋饼（一份）");
+        foodNameMapCalorie.put("蛋饼（一份）", "255大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("韭菜盒子（两个）", "260千"));
+        typeMapFoodNames.get("主食").add("韭菜盒子（两个）");
+        foodNameMapCalorie.put("韭菜盒子（两个）", "260千");
+        calorieInfo.get("主食").add(new CalorieInfoItem("卡春卷（100g）", "463大卡"));
+        typeMapFoodNames.get("主食").add("卡春卷（100g）");
+        foodNameMapCalorie.put("卡春卷（100g）", "463大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("烧饼（100g）", "326大卡"));
+        typeMapFoodNames.get("主食").add("烧饼（100g）");
+        foodNameMapCalorie.put("烧饼（100g）", "326大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("油条(一条)", "230大卡"));
+        typeMapFoodNames.get("主食").add("油条(一条)");
+        foodNameMapCalorie.put("油条(一条)", "230大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("花生豆花(一碗)", "180大卡"));
+        typeMapFoodNames.get("主食").add("花生豆花(一碗)");
+        foodNameMapCalorie.put("花生豆花(一碗)", "180大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("三鲜豆皮(100g)", "240大卡"));
+        typeMapFoodNames.get("主食").add("三鲜豆皮(100g)");
+        foodNameMapCalorie.put("三鲜豆皮(100g)", "240大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("烧麦（100g）", "238大卡"));
+        typeMapFoodNames.get("主食").add("烧麦（100g）");
+        foodNameMapCalorie.put("烧麦（100g）", "238大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("汤包（100g）", "238大卡"));
+        typeMapFoodNames.get("主食").add("汤包（100g）");
+        foodNameMapCalorie.put("汤包（100g）", "238大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("烙饼（100g）", "225大卡"));
+        typeMapFoodNames.get("主食").add("烙饼（100g）");
+        foodNameMapCalorie.put("烙饼（100g）", "225大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("粉丝（100g）", "335大卡"));
+        typeMapFoodNames.get("主食").add("粉丝（100g）");
+        foodNameMapCalorie.put("粉丝（100g）", "335大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("皮蛋瘦肉粥（一碗）", "367大卡"));
+        typeMapFoodNames.get("主食").add("皮蛋瘦肉粥（一碗）");
+        foodNameMapCalorie.put("皮蛋瘦肉粥（一碗）", "367大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("凉粉(带调料100g）", "50大卡"));
+        typeMapFoodNames.get("主食").add("凉粉(带调料100g）");
+        foodNameMapCalorie.put("凉粉(带调料100g）", "50大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("腐竹皮（100g）", "489大卡"));
+        typeMapFoodNames.get("主食").add("腐竹皮（100g）");
+        foodNameMapCalorie.put("腐竹皮（100g）", "489大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("酱豆腐（100g）", "151大卡"));
+        typeMapFoodNames.get("主食").add("酱豆腐（100g）");
+        foodNameMapCalorie.put("酱豆腐（100g）", "151大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("香干（100g）", "147大卡"));
+        typeMapFoodNames.get("主食").add("香干（100g）");
+        foodNameMapCalorie.put("香干（100g）", "147大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("臭豆腐（100g）", "130大卡"));
+        typeMapFoodNames.get("主食").add("臭豆腐（100g）");
+        foodNameMapCalorie.put("臭豆腐（100g）", "130大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("北豆腐（100g）", "98大卡"));
+        typeMapFoodNames.get("主食").add("北豆腐（100g）");
+        foodNameMapCalorie.put("北豆腐（100g）", "98大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("地瓜粉（100g）", "336大卡"));
+        typeMapFoodNames.get("主食").add("地瓜粉（100g）");
+        foodNameMapCalorie.put("地瓜粉（100g）", "336大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("大麦（100g）", "307大卡"));
+        typeMapFoodNames.get("主食").add("大麦（100g）");
+        foodNameMapCalorie.put("大麦（100g）", "307大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("白薯(白心100g）", "64大卡"));
+        typeMapFoodNames.get("主食").add("白薯(白心100g）");
+        foodNameMapCalorie.put("白薯(白心100g）", "64大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("豆腐脑(带卤100g）", "47大卡"));
+        typeMapFoodNames.get("主食").add("豆腐脑(带卤100g）");
+        foodNameMapCalorie.put("豆腐脑(带卤100g）", "47大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("豆汁(生100g）", "10大卡"));
+        typeMapFoodNames.get("主食").add("豆汁(生100g）");
+        foodNameMapCalorie.put("豆汁(生100g）", "10大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("小豆粥（100g）", "61大卡"));
+        typeMapFoodNames.get("主食").add("小豆粥（100g）");
+        foodNameMapCalorie.put("小豆粥（100g）", "61大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("鱼板（一串）", "60大卡"));
+        typeMapFoodNames.get("主食").add("鱼板（一串）");
+        foodNameMapCalorie.put("鱼板（一串）", "60大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("玉米棒（一串）", "100大卡"));
+        typeMapFoodNames.get("主食").add("玉米棒（一串）");
+        foodNameMapCalorie.put("玉米棒（一串）", "100大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("贡丸串（一串）", "100大卡"));
+        typeMapFoodNames.get("主食").add("贡丸串（一串）");
+        foodNameMapCalorie.put("贡丸串（一串）", "100大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("蛋丸（一串）", "90大卡"));
+        typeMapFoodNames.get("主食").add("蛋丸（一串）");
+        foodNameMapCalorie.put("蛋丸（一串）", "90大卡");
+        calorieInfo.get("主食").add(new CalorieInfoItem("龙虾棒（一串）", "95大卡"));
+        typeMapFoodNames.get("主食").add("龙虾棒（一串）");
+        foodNameMapCalorie.put("龙虾棒（一串）", "95大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("咖喱饭", "640大卡"));
+        typeMapFoodNames.get("主饭").add("咖喱饭");
+        foodNameMapCalorie.put("咖喱饭", "640大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("什锦炒饭", "781-800大卡"));
+        typeMapFoodNames.get("主饭").add("什锦炒饭");
+        foodNameMapCalorie.put("什锦炒饭", "781-800大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("阳春面", "392大卡"));
+        typeMapFoodNames.get("主饭").add("阳春面");
+        foodNameMapCalorie.put("阳春面", "392大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("牛肉面", "540大卡"));
+        typeMapFoodNames.get("主饭").add("牛肉面");
+        foodNameMapCalorie.put("牛肉面", "540大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("什锦炒面", "860大卡"));
+        typeMapFoodNames.get("主饭").add("什锦炒面");
+        foodNameMapCalorie.put("什锦炒面", "860大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("意大利面", "约500-700大卡"));
+        typeMapFoodNames.get("主饭").add("意大利面");
+        foodNameMapCalorie.put("意大利面", "约500-700大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("炸酱面", "385大卡"));
+        typeMapFoodNames.get("主饭").add("炸酱面");
+        foodNameMapCalorie.put("炸酱面", "385大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("焗海鲜", "357大卡"));
+        typeMapFoodNames.get("主饭").add("焗海鲜");
+        foodNameMapCalorie.put("焗海鲜", "357大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("火腿饭", "690大卡"));
+        typeMapFoodNames.get("主饭").add("火腿饭");
+        foodNameMapCalorie.put("火腿饭", "690大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("烤白菜", "149大卡"));
+        typeMapFoodNames.get("主饭").add("烤白菜");
+        foodNameMapCalorie.put("烤白菜", "149大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("炸肉片", "302大卡"));
+        typeMapFoodNames.get("主饭").add("炸肉片");
+        foodNameMapCalorie.put("炸肉片", "302大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("牛肉蔬菜汤", "362大卡"));
+        typeMapFoodNames.get("主饭").add("牛肉蔬菜汤");
+        foodNameMapCalorie.put("牛肉蔬菜汤", "362大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("排骨饭面", "480大卡"));
+        typeMapFoodNames.get("主饭").add("排骨饭面");
+        foodNameMapCalorie.put("排骨饭面", "480大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("肉丝面", "440大卡"));
+        typeMapFoodNames.get("主饭").add("肉丝面");
+        foodNameMapCalorie.put("肉丝面", "440大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("方便面", "470大卡"));
+        typeMapFoodNames.get("主饭").add("方便面");
+        foodNameMapCalorie.put("方便面", "470大卡");
+        calorieInfo.get("主饭").add(new CalorieInfoItem("榨菜肉丝面", "400大卡"));
+        typeMapFoodNames.get("主饭").add("榨菜肉丝面");
+        foodNameMapCalorie.put("榨菜肉丝面", "400大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("番茄（100g）", "19大卡"));
+        typeMapFoodNames.get("蔬菜类").add("番茄（100g）");
+        foodNameMapCalorie.put("番茄（100g）", "19大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("海带（100g）", "23大卡"));
+        typeMapFoodNames.get("蔬菜类").add("海带（100g）");
+        foodNameMapCalorie.put("海带（100g）", "23大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("蘑菇（100g）", "28大卡"));
+        typeMapFoodNames.get("蔬菜类").add("蘑菇（100g）");
+        foodNameMapCalorie.put("蘑菇（100g）", "28大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("冬瓜（100g）", "11大卡"));
+        typeMapFoodNames.get("蔬菜类").add("冬瓜（100g）");
+        foodNameMapCalorie.put("冬瓜（100g）", "11大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("芹菜（100g）", "10大卡"));
+        typeMapFoodNames.get("蔬菜类").add("芹菜（100g）");
+        foodNameMapCalorie.put("芹菜（100g）", "10大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("芦笋（一杯145g）", "30大卡"));
+        typeMapFoodNames.get("蔬菜类").add("芦笋（一杯145g）");
+        foodNameMapCalorie.put("芦笋（一杯145g）", "30大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("豆芽菜（一杯125g）", "35大卡"));
+        typeMapFoodNames.get("蔬菜类").add("豆芽菜（一杯125g）");
+        foodNameMapCalorie.put("豆芽菜（一杯125g）", "35大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("包心菜（一杯145g）", "30大卡"));
+        typeMapFoodNames.get("蔬菜类").add("包心菜（一杯145g）");
+        foodNameMapCalorie.put("包心菜（一杯145g）", "30大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("胡萝卜（一条72g）", "30大卡"));
+        typeMapFoodNames.get("蔬菜类").add("胡萝卜（一条72g）");
+        foodNameMapCalorie.put("胡萝卜（一条72g）", "30大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("花菜(一杯125g)", "30大卡"));
+        typeMapFoodNames.get("蔬菜类").add("花菜(一杯125g)");
+        foodNameMapCalorie.put("花菜(一杯125g)", "30大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("香菇（一杯70g）", "20大卡"));
+        typeMapFoodNames.get("蔬菜类").add("香菇（一杯70g）");
+        foodNameMapCalorie.put("香菇（一杯70g）", "20大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("芥菜(一杯140g)", "30大卡"));
+        typeMapFoodNames.get("蔬菜类").add("芥菜(一杯140g)");
+        foodNameMapCalorie.put("芥菜(一杯140g)", "30大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("洋葱(一杯210g)", "60大卡"));
+        typeMapFoodNames.get("蔬菜类").add("洋葱(一杯210g)");
+        foodNameMapCalorie.put("洋葱(一杯210g)", "60大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("青豆(一杯170g)", "150大卡"));
+        typeMapFoodNames.get("蔬菜类").add("青豆(一杯170g)");
+        foodNameMapCalorie.put("青豆(一杯170g)", "150大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("雪菜（100g）", "60大卡"));
+        typeMapFoodNames.get("蔬菜类").add("雪菜（100g）");
+        foodNameMapCalorie.put("雪菜（100g）", "60大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("竹笋（100g）", "40大卡"));
+        typeMapFoodNames.get("蔬菜类").add("竹笋（100g）");
+        foodNameMapCalorie.put("竹笋（100g）", "40大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("菜心（100g）", "40大卡"));
+        typeMapFoodNames.get("蔬菜类").add("菜心（100g）");
+        foodNameMapCalorie.put("菜心（100g）", "40大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("白菜（100g）", "40大卡"));
+        typeMapFoodNames.get("蔬菜类").add("白菜（100g）");
+        foodNameMapCalorie.put("白菜（100g）", "40大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("丝瓜（100g）", "40大卡"));
+        typeMapFoodNames.get("蔬菜类").add("丝瓜（100g）");
+        foodNameMapCalorie.put("丝瓜（100g）", "40大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("大蒜（100g）", "40大卡"));
+        typeMapFoodNames.get("蔬菜类").add("大蒜（100g）");
+        foodNameMapCalorie.put("大蒜（100g）", "40大卡");
+        calorieInfo.get("蔬菜类").add(new CalorieInfoItem("生菜（100g）", "40大卡"));
+        typeMapFoodNames.get("蔬菜类").add("生菜（100g）");
+        foodNameMapCalorie.put("生菜（100g）", "40大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("鸡蛋（58g）", "86大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("鸡蛋（58g）");
+        foodNameMapCalorie.put("鸡蛋（58g）", "86大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("鸭蛋（大，65g）", "114大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("鸭蛋（大，65g）");
+        foodNameMapCalorie.put("鸭蛋（大，65g）", "114大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("咸鸭蛋（88g）", "190大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("咸鸭蛋（88g）");
+        foodNameMapCalorie.put("咸鸭蛋（88g）", "190大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("鹌鹑蛋（10g）", "16大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("鹌鹑蛋（10g）");
+        foodNameMapCalorie.put("鹌鹑蛋（10g）", "16大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("火鸡蛋（80g）", "135大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("火鸡蛋（80g）");
+        foodNameMapCalorie.put("火鸡蛋（80g）", "135大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("松花蛋(鸡83g)", "178大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("松花蛋(鸡83g)");
+        foodNameMapCalorie.put("松花蛋(鸡83g)", "178大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("煎蛋（一个）", "136大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("煎蛋（一个）");
+        foodNameMapCalorie.put("煎蛋（一个）", "136大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("烧鸭(120g)", "356大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("烧鸭(120g)");
+        foodNameMapCalorie.put("烧鸭(120g)", "356大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("火腿（100g）", "320大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("火腿（100g）");
+        foodNameMapCalorie.put("火腿（100g）", "320大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("香肠（100g）", "508大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("香肠（100g）");
+        foodNameMapCalorie.put("香肠（100g）", "508大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("腊肠（100g）", "310大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("腊肠（100g）");
+        foodNameMapCalorie.put("腊肠（100g）", "310大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("羊肉前腿（100g）", "111大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("羊肉前腿（100g）");
+        foodNameMapCalorie.put("羊肉前腿（100g）", "111大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("羊肉串(炸)（100g）", "217大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("羊肉串(炸)（100g）");
+        foodNameMapCalorie.put("羊肉串(炸)（100g）", "217大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("羊肉(熟)（100g）", "215大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("羊肉(熟)（100g）");
+        foodNameMapCalorie.put("羊肉(熟)（100g）", "215大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("猪肉(肥100g）", "816大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("猪肉(肥100g）");
+        foodNameMapCalorie.put("猪肉(肥100g）", "816大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("牛肉（100g）", "106大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("牛肉（100g）");
+        foodNameMapCalorie.put("牛肉（100g）", "106大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("鸡胗（100g）", "118大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("鸡胗（100g）");
+        foodNameMapCalorie.put("鸡胗（100g）", "118大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("烤鸡(73g)", "240大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("烤鸡(73g)");
+        foodNameMapCalorie.put("烤鸡(73g)", "240大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("鸡肝（100g）", "121大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("鸡肝（100g）");
+        foodNameMapCalorie.put("鸡肝（100g）", "121大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("鸡腿(69g)", "181大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("鸡腿(69g)");
+        foodNameMapCalorie.put("鸡腿(69g)", "181大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("鸡翅膀（69g）", "194大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("鸡翅膀（69g）");
+        foodNameMapCalorie.put("鸡翅膀（69g）", "194大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("鳕鱼（100g）", "88大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("鳕鱼（100g）");
+        foodNameMapCalorie.put("鳕鱼（100g）", "88大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("石斑鱼(57g)", "320大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("石斑鱼(57g)");
+        foodNameMapCalorie.put("石斑鱼(57g)", "320大卡");
+        calorieInfo.get("肉类蛋类").add(new CalorieInfoItem("对虾(61g)", "93大卡"));
+        typeMapFoodNames.get("肉类蛋类").add("对虾(61g)");
+        foodNameMapCalorie.put("对虾(61g)", "93大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("番茄", "18大卡"));
+        typeMapFoodNames.get("水果").add("番茄");
+        foodNameMapCalorie.put("番茄", "18大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("西瓜", "20大卡"));
+        typeMapFoodNames.get("水果").add("西瓜");
+        foodNameMapCalorie.put("西瓜", "20大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("柠檬", "31大卡"));
+        typeMapFoodNames.get("水果").add("柠檬");
+        foodNameMapCalorie.put("柠檬", "31大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("香瓜", "35大卡"));
+        typeMapFoodNames.get("水果").add("香瓜");
+        foodNameMapCalorie.put("香瓜", "35大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("草莓", "35大卡"));
+        typeMapFoodNames.get("水果").add("草莓");
+        foodNameMapCalorie.put("草莓", "35大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("杏子", "40大卡"));
+        typeMapFoodNames.get("水果").add("杏子");
+        foodNameMapCalorie.put("杏子", "40大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("桃", "37大卡"));
+        typeMapFoodNames.get("水果").add("桃");
+        foodNameMapCalorie.put("桃", "37大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("哈密瓜(四分之一个)", "48大卡"));
+        typeMapFoodNames.get("水果").add("哈密瓜(四分之一个)");
+        foodNameMapCalorie.put("哈密瓜(四分之一个)", "48大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("无花果(二个)", "43大卡"));
+        typeMapFoodNames.get("水果").add("无花果(二个)");
+        foodNameMapCalorie.put("无花果(二个)", "43大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("玉米", "105大卡"));
+        typeMapFoodNames.get("水果").add("玉米");
+        foodNameMapCalorie.put("玉米", "105大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("梨", "38大卡"));
+        typeMapFoodNames.get("水果").add("梨");
+        foodNameMapCalorie.put("梨", "38大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("橄榄（80g）", "49大卡"));
+        typeMapFoodNames.get("水果").add("橄榄（80g）");
+        foodNameMapCalorie.put("橄榄（80g）", "49大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("橘子", "42大卡"));
+        typeMapFoodNames.get("水果").add("橘子");
+        foodNameMapCalorie.put("橘子", "42大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("苹果", "44大卡"));
+        typeMapFoodNames.get("水果").add("苹果");
+        foodNameMapCalorie.put("苹果", "44大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("葡萄", "54大卡"));
+        typeMapFoodNames.get("水果").add("葡萄");
+        foodNameMapCalorie.put("葡萄", "54大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("猕猴桃", "54大卡"));
+        typeMapFoodNames.get("水果").add("猕猴桃");
+        foodNameMapCalorie.put("猕猴桃", "54大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("荔枝", "57大卡"));
+        typeMapFoodNames.get("水果").add("荔枝");
+        foodNameMapCalorie.put("荔枝", "57大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("香蕉", "84大卡"));
+        typeMapFoodNames.get("水果").add("香蕉");
+        foodNameMapCalorie.put("香蕉", "84大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("橙(中)", "50大卡"));
+        typeMapFoodNames.get("水果").add("橙(中)");
+        foodNameMapCalorie.put("橙(中)", "50大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("芒果(中)", "100大卡"));
+        typeMapFoodNames.get("水果").add("芒果(中)");
+        foodNameMapCalorie.put("芒果(中)", "100大卡");
+        calorieInfo.get("水果").add(new CalorieInfoItem("新鲜菠萝(120g)", "50大卡"));
+        typeMapFoodNames.get("水果").add("新鲜菠萝(120g)");
+        foodNameMapCalorie.put("新鲜菠萝(120g)", "50大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("红糖（100g）", "389大卡"));
+        typeMapFoodNames.get("零食").add("红糖（100g）");
+        foodNameMapCalorie.put("红糖（100g）", "389大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("冰糖（100g）", "397大卡"));
+        typeMapFoodNames.get("零食").add("冰糖（100g）");
+        foodNameMapCalorie.put("冰糖（100g）", "397大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("爆米花（100g）", "459大卡"));
+        typeMapFoodNames.get("零食").add("爆米花（100g）");
+        foodNameMapCalorie.put("爆米花（100g）", "459大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("虾味仙（一包）", "432大卡"));
+        typeMapFoodNames.get("零食").add("虾味仙（一包）");
+        foodNameMapCalorie.put("虾味仙（一包）", "432大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("虾味条（一包）102公克", "460大卡"));
+        typeMapFoodNames.get("零食").add("虾味条（一包）102公克");
+        foodNameMapCalorie.put("虾味条（一包）102公克", "460大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("烤玉米条（一包）", "524大卡"));
+        typeMapFoodNames.get("零食").add("烤玉米条（一包）");
+        foodNameMapCalorie.put("烤玉米条（一包）", "524大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("巧克力1块（100g）", "550大卡"));
+        typeMapFoodNames.get("零食").add("巧克力1块（100g）");
+        foodNameMapCalorie.put("巧克力1块（100g）", "550大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("爆米花（100g）", "459大卡"));
+        typeMapFoodNames.get("零食").add("爆米花（100g）");
+        foodNameMapCalorie.put("爆米花（100g）", "459大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("薯片（100g）", "555大卡"));
+        typeMapFoodNames.get("零食").add("薯片（100g）");
+        foodNameMapCalorie.put("薯片（100g）", "555大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("品客薯片绿、红、橘色小罐", "340大卡"));
+        typeMapFoodNames.get("零食").add("品客薯片绿、红、橘色小罐");
+        foodNameMapCalorie.put("品客薯片绿、红、橘色小罐", "340大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("铜锣烧（一个50g）", "约140大卡"));
+        typeMapFoodNames.get("零食").add("铜锣烧（一个50g）");
+        foodNameMapCalorie.put("铜锣烧（一个50g）", "约140大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("麻薯（一个50g）", "约120大卡"));
+        typeMapFoodNames.get("零食").add("麻薯（一个50g）");
+        foodNameMapCalorie.put("麻薯（一个50g）", "约120大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("牛奶太妃糖（100g）", "366大卡"));
+        typeMapFoodNames.get("零食").add("牛奶太妃糖（100g）");
+        foodNameMapCalorie.put("牛奶太妃糖（100g）", "366大卡");
+        calorieInfo.get("零食").add(new CalorieInfoItem("水果软糖约4块", "150大卡"));
+        typeMapFoodNames.get("零食").add("水果软糖约4块");
+        foodNameMapCalorie.put("水果软糖约4块", "150大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("巧克力蛋筒", "240大卡"));
+        typeMapFoodNames.get("冷饮").add("巧克力蛋筒");
+        foodNameMapCalorie.put("巧克力蛋筒", "240大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("冰泡沫红茶(冷饮)", "60大卡"));
+        typeMapFoodNames.get("冷饮").add("冰泡沫红茶(冷饮)");
+        foodNameMapCalorie.put("冰泡沫红茶(冷饮)", "60大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("水果果冻(260g)", "260大卡"));
+        typeMapFoodNames.get("冷饮").add("水果果冻(260g)");
+        foodNameMapCalorie.put("水果果冻(260g)", "260大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("统一布丁(200g)", "380大卡"));
+        typeMapFoodNames.get("冷饮").add("统一布丁(200g)");
+        foodNameMapCalorie.put("统一布丁(200g)", "380大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("高纤椰果(200g)", "100大卡"));
+        typeMapFoodNames.get("冷饮").add("高纤椰果(200g)");
+        foodNameMapCalorie.put("高纤椰果(200g)", "100大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("统一鲜奶酪(120g)", "185大卡"));
+        typeMapFoodNames.get("冷饮").add("统一鲜奶酪(120g)");
+        foodNameMapCalorie.put("统一鲜奶酪(120g)", "185大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("咖啡冻(冷饮含奶精130g)", "120大卡"));
+        typeMapFoodNames.get("冷饮").add("咖啡冻(冷饮含奶精130g)");
+        foodNameMapCalorie.put("咖啡冻(冷饮含奶精130g)", "120大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("统一多多(180g)", "180大卡"));
+        typeMapFoodNames.get("冷饮").add("统一多多(180g)");
+        foodNameMapCalorie.put("统一多多(180g)", "180大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("养乐多(100g)", "100大卡"));
+        typeMapFoodNames.get("冷饮").add("养乐多(100g)");
+        foodNameMapCalorie.put("养乐多(100g)", "100大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("原味优酪乳(230g)", "180大卡"));
+        typeMapFoodNames.get("冷饮").add("原味优酪乳(230g)");
+        foodNameMapCalorie.put("原味优酪乳(230g)", "180大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("乳果(100g)", "65大卡"));
+        typeMapFoodNames.get("冷饮").add("乳果(100g)");
+        foodNameMapCalorie.put("乳果(100g)", "65大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("绿力柳橙汁(一罐900cc)", "510大卡"));
+        typeMapFoodNames.get("冷饮").add("绿力柳橙汁(一罐900cc)");
+        foodNameMapCalorie.put("绿力柳橙汁(一罐900cc)", "510大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("藘笋汁(250g)", "90大卡"));
+        typeMapFoodNames.get("冷饮").add("藘笋汁(250g)");
+        foodNameMapCalorie.put("藘笋汁(250g)", "90大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("莎莎亚(320g)", "200大卡"));
+        typeMapFoodNames.get("冷饮").add("莎莎亚(320g)");
+        foodNameMapCalorie.put("莎莎亚(320g)", "200大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("酸梅汤(375cc)", "190大卡"));
+        typeMapFoodNames.get("冷饮").add("酸梅汤(375cc)");
+        foodNameMapCalorie.put("酸梅汤(375cc)", "190大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("冬瓜茶(250cc)", "100大卡"));
+        typeMapFoodNames.get("冷饮").add("冬瓜茶(250cc)");
+        foodNameMapCalorie.put("冬瓜茶(250cc)", "100大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("雪露(350g)", "350大卡"));
+        typeMapFoodNames.get("冷饮").add("雪露(350g)");
+        foodNameMapCalorie.put("雪露(350g)", "350大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("芬达葡萄汽水(355cc)", "190大卡"));
+        typeMapFoodNames.get("冷饮").add("芬达葡萄汽水(355cc)");
+        foodNameMapCalorie.put("芬达葡萄汽水(355cc)", "190大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("香吉士苹果汽水(350cc)", "185大卡"));
+        typeMapFoodNames.get("冷饮").add("香吉士苹果汽水(350cc)");
+        foodNameMapCalorie.put("香吉士苹果汽水(350cc)", "185大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("雪碧汽水(355cc)", "135大卡"));
+        typeMapFoodNames.get("冷饮").add("雪碧汽水(355cc)");
+        foodNameMapCalorie.put("雪碧汽水(355cc)", "135大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("奥利多(150cc)", "90大卡"));
+        typeMapFoodNames.get("冷饮").add("奥利多(150cc)");
+        foodNameMapCalorie.put("奥利多(150cc)", "90大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("高纤椰果(170g)", "80大卡"));
+        typeMapFoodNames.get("冷饮").add("高纤椰果(170g)");
+        foodNameMapCalorie.put("高纤椰果(170g)", "80大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("古道金桔柠檬(340ml)", "200大卡"));
+        typeMapFoodNames.get("冷饮").add("古道金桔柠檬(340ml)");
+        foodNameMapCalorie.put("古道金桔柠檬(340ml)", "200大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("冰镇红茶(375cc)", "120大卡"));
+        typeMapFoodNames.get("冷饮").add("冰镇红茶(375cc)");
+        foodNameMapCalorie.put("冰镇红茶(375cc)", "120大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("伯朗咖啡(250g)", "100大卡"));
+        typeMapFoodNames.get("冷饮").add("伯朗咖啡(250g)");
+        foodNameMapCalorie.put("伯朗咖啡(250g)", "100大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("古道贵爵奶茶(340ml)", "150大卡"));
+        typeMapFoodNames.get("冷饮").add("古道贵爵奶茶(340ml)");
+        foodNameMapCalorie.put("古道贵爵奶茶(340ml)", "150大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("薄荷茶(一杯)", "60大卡"));
+        typeMapFoodNames.get("冷饮").add("薄荷茶(一杯)");
+        foodNameMapCalorie.put("薄荷茶(一杯)", "60大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("珍珠奶茶(一杯)", "160大卡"));
+        typeMapFoodNames.get("冷饮").add("珍珠奶茶(一杯)");
+        foodNameMapCalorie.put("珍珠奶茶(一杯)", "160大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("桔子茶(一杯)", "90大卡"));
+        typeMapFoodNames.get("冷饮").add("桔子茶(一杯)");
+        foodNameMapCalorie.put("桔子茶(一杯)", "90大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("椰子汁(410g)", "180大卡"));
+        typeMapFoodNames.get("冷饮").add("椰子汁(410g)");
+        foodNameMapCalorie.put("椰子汁(410g)", "180大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("冰淇淋饼乾(75g)", "180大卡"));
+        typeMapFoodNames.get("冷饮").add("冰淇淋饼乾(75g)");
+        foodNameMapCalorie.put("冰淇淋饼乾(75g)", "180大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("果汁冰棒(三支)", "240大卡"));
+        typeMapFoodNames.get("冷饮").add("果汁冰棒(三支)");
+        foodNameMapCalorie.put("果汁冰棒(三支)", "240大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("芋头麻淇冰(80g)", "170大卡"));
+        typeMapFoodNames.get("冷饮").add("芋头麻淇冰(80g)");
+        foodNameMapCalorie.put("芋头麻淇冰(80g)", "170大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("冰淇淋(一个)", "200大卡"));
+        typeMapFoodNames.get("冷饮").add("冰淇淋(一个)");
+        foodNameMapCalorie.put("冰淇淋(一个)", "200大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("甜筒", "290大卡"));
+        typeMapFoodNames.get("冷饮").add("甜筒");
+        foodNameMapCalorie.put("甜筒", "290大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("圣代冰淇淋(一个)", "250大卡"));
+        typeMapFoodNames.get("冷饮").add("圣代冰淇淋(一个)");
+        foodNameMapCalorie.put("圣代冰淇淋(一个)", "250大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("芋头牛奶冰棒(一个)", "200大卡"));
+        typeMapFoodNames.get("冷饮").add("芋头牛奶冰棒(一个)");
+        foodNameMapCalorie.put("芋头牛奶冰棒(一个)", "200大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("巧克力雪糕(一个)", "280大卡"));
+        typeMapFoodNames.get("冷饮").add("巧克力雪糕(一个)");
+        foodNameMapCalorie.put("巧克力雪糕(一个)", "280大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("八宝粥(热品)", "440大卡380g"));
+        typeMapFoodNames.get("冷饮").add("八宝粥(热品)");
+        foodNameMapCalorie.put("八宝粥(热品)", "440大卡380g");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("地瓜芋丸甜汤(一杯)", "220大卡"));
+        typeMapFoodNames.get("冷饮").add("地瓜芋丸甜汤(一杯)");
+        foodNameMapCalorie.put("地瓜芋丸甜汤(一杯)", "220大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("烧仙草(一杯)", "230大卡"));
+        typeMapFoodNames.get("冷饮").add("烧仙草(一杯)");
+        foodNameMapCalorie.put("烧仙草(一杯)", "230大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("绿豆汤(350g)", "220大卡"));
+        typeMapFoodNames.get("冷饮").add("绿豆汤(350g)");
+        foodNameMapCalorie.put("绿豆汤(350g)", "220大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("热可可(375ml)", "180大卡"));
+        typeMapFoodNames.get("冷饮").add("热可可(375ml)");
+        foodNameMapCalorie.put("热可可(375ml)", "180大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("芝麻奶茶(一壶)", "345大卡"));
+        typeMapFoodNames.get("冷饮").add("芝麻奶茶(一壶)");
+        foodNameMapCalorie.put("芝麻奶茶(一壶)", "345大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("红豆汤圆(一碗)", "255大卡"));
+        typeMapFoodNames.get("冷饮").add("红豆汤圆(一碗)");
+        foodNameMapCalorie.put("红豆汤圆(一碗)", "255大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("开胃酒(一杯)", "65大卡"));
+        typeMapFoodNames.get("冷饮").add("开胃酒(一杯)");
+        foodNameMapCalorie.put("开胃酒(一杯)", "65大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("红粉佳人(一杯)", "105大卡"));
+        typeMapFoodNames.get("冷饮").add("红粉佳人(一杯)");
+        foodNameMapCalorie.put("红粉佳人(一杯)", "105大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("蔘茸酒（酒类300ml）", "575大卡"));
+        typeMapFoodNames.get("冷饮").add("蔘茸酒（酒类300ml）");
+        foodNameMapCalorie.put("蔘茸酒（酒类300ml）", "575大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("保力达-B(酒类一瓶)", "705大卡"));
+        typeMapFoodNames.get("冷饮").add("保力达-B(酒类一瓶)");
+        foodNameMapCalorie.put("保力达-B(酒类一瓶)", "705大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("台湾啤酒(罐)", "120大卡355cc"));
+        typeMapFoodNames.get("冷饮").add("台湾啤酒(罐)");
+        foodNameMapCalorie.put("台湾啤酒(罐)", "120大卡355cc");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("黑啤酒(360cc)", "160大卡"));
+        typeMapFoodNames.get("冷饮").add("黑啤酒(360cc)");
+        foodNameMapCalorie.put("黑啤酒(360cc)", "160大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("白葡萄酒(0.6L)", "450大卡"));
+        typeMapFoodNames.get("冷饮").add("白葡萄酒(0.6L)");
+        foodNameMapCalorie.put("白葡萄酒(0.6L)", "450大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("全脂牛奶雪糕、优酪乳雪糕", "180-200大卡"));
+        typeMapFoodNames.get("冷饮").add("全脂牛奶雪糕、优酪乳雪糕");
+        foodNameMapCalorie.put("全脂牛奶雪糕、优酪乳雪糕", "180-200大卡");
+        calorieInfo.get("冷饮").add(new CalorieInfoItem("牛奶+豆类冰棒", "160-190大卡"));
+        typeMapFoodNames.get("冷饮").add("牛奶+豆类冰棒");
+        foodNameMapCalorie.put("牛奶+豆类冰棒", "160-190大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("苹果Muffins1.5oz(约42g)", "205大卡"));
+        typeMapFoodNames.get("甜点").add("苹果Muffins1.5oz(约42g)");
+        foodNameMapCalorie.put("苹果Muffins1.5oz(约42g)", "205大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("玉米Muffins1.5oz", "180大卡"));
+        typeMapFoodNames.get("甜点").add("玉米Muffins1.5oz");
+        foodNameMapCalorie.put("玉米Muffins1.5oz", "180大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("巧克力蛋糕1片", "320大卡"));
+        typeMapFoodNames.get("甜点").add("巧克力蛋糕1片");
+        foodNameMapCalorie.put("巧克力蛋糕1片", "320大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("起士面包1个", "420大卡"));
+        typeMapFoodNames.get("甜点").add("起士面包1个");
+        foodNameMapCalorie.put("起士面包1个", "420大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("传统蛋塔（一个)", "255大卡"));
+        typeMapFoodNames.get("甜点").add("传统蛋塔（一个)");
+        foodNameMapCalorie.put("传统蛋塔（一个)", "255大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("苹果派（一个）", "270大卡"));
+        typeMapFoodNames.get("甜点").add("苹果派（一个）");
+        foodNameMapCalorie.put("苹果派（一个）", "270大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("热狗", "240-300大卡"));
+        typeMapFoodNames.get("甜点").add("热狗");
+        foodNameMapCalorie.put("热狗", "240-300大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("cheese蛋糕（一块）", "224大卡"));
+        typeMapFoodNames.get("甜点").add("cheese蛋糕（一块）");
+        foodNameMapCalorie.put("cheese蛋糕（一块）", "224大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("水果蛋糕（一块）", "297大卡"));
+        typeMapFoodNames.get("甜点").add("水果蛋糕（一块）");
+        foodNameMapCalorie.put("水果蛋糕（一块）", "297大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("桃酥（100g）", "481大卡"));
+        typeMapFoodNames.get("甜点").add("桃酥（100g）");
+        foodNameMapCalorie.put("桃酥（100g）", "481大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("凤尾酥（100g）", "511大卡"));
+        typeMapFoodNames.get("甜点").add("凤尾酥（100g）");
+        foodNameMapCalorie.put("凤尾酥（100g）", "511大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("起酥（100g）", "499大卡"));
+        typeMapFoodNames.get("甜点").add("起酥（100g）");
+        foodNameMapCalorie.put("起酥（100g）", "499大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("黑麻香酥（100g）", "436大卡"));
+        typeMapFoodNames.get("甜点").add("黑麻香酥（100g）");
+        foodNameMapCalorie.put("黑麻香酥（100g）", "436大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("蛋麻脆（100g）", "452大卡"));
+        typeMapFoodNames.get("甜点").add("蛋麻脆（100g）");
+        foodNameMapCalorie.put("蛋麻脆（100g）", "452大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("香油炒面（100g）", "407大卡"));
+        typeMapFoodNames.get("甜点").add("香油炒面（100g）");
+        foodNameMapCalorie.put("香油炒面（100g）", "407大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("酥皮糕点（100g）", "426大卡"));
+        typeMapFoodNames.get("甜点").add("酥皮糕点（100g）");
+        foodNameMapCalorie.put("酥皮糕点（100g）", "426大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("开口笑（100g）", "512大卡"));
+        typeMapFoodNames.get("甜点").add("开口笑（100g）");
+        foodNameMapCalorie.put("开口笑（100g）", "512大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("硬皮糕点（100g）", "470大卡"));
+        typeMapFoodNames.get("甜点").add("硬皮糕点（100g）");
+        foodNameMapCalorie.put("硬皮糕点（100g）", "470大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("鹅油卷（100g）", "461大卡"));
+        typeMapFoodNames.get("甜点").add("鹅油卷（100g）");
+        foodNameMapCalorie.put("鹅油卷（100g）", "461大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("混糖糕点（100g）", "453大卡"));
+        typeMapFoodNames.get("甜点").add("混糖糕点（100g）");
+        foodNameMapCalorie.put("混糖糕点（100g）", "453大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("开花豆(100g)", "446大卡"));
+        typeMapFoodNames.get("甜点").add("开花豆(100g)");
+        foodNameMapCalorie.put("开花豆(100g)", "446大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("老婆饼（一个）", "250大卡"));
+        typeMapFoodNames.get("甜点").add("老婆饼（一个）");
+        foodNameMapCalorie.put("老婆饼（一个）", "250大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("状元饼（100g）", "435大卡"));
+        typeMapFoodNames.get("甜点").add("状元饼（100g）");
+        foodNameMapCalorie.put("状元饼（100g）", "435大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("麻花（100g）", "524大卡"));
+        typeMapFoodNames.get("甜点").add("麻花（100g）");
+        foodNameMapCalorie.put("麻花（100g）", "524大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("月饼(豆沙100g）", "405大卡"));
+        typeMapFoodNames.get("甜点").add("月饼(豆沙100g）");
+        foodNameMapCalorie.put("月饼(豆沙100g）", "405大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("松饼（1片）", "206大卡"));
+        typeMapFoodNames.get("甜点").add("松饼（1片）");
+        foodNameMapCalorie.put("松饼（1片）", "206大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("年糕（100g）", "154大卡"));
+        typeMapFoodNames.get("甜点").add("年糕（100g）");
+        foodNameMapCalorie.put("年糕（100g）", "154大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("江米条（100g）", "439大卡"));
+        typeMapFoodNames.get("甜点").add("江米条（100g）");
+        foodNameMapCalorie.put("江米条（100g）", "439大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("驴打滚（100g）", "194大卡"));
+        typeMapFoodNames.get("甜点").add("驴打滚（100g）");
+        foodNameMapCalorie.put("驴打滚（100g）", "194大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("碗糕(100g)", "332大卡"));
+        typeMapFoodNames.get("甜点").add("碗糕(100g)");
+        foodNameMapCalorie.put("碗糕(100g)", "332大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("豌豆黄（100g）", "134大卡"));
+        typeMapFoodNames.get("甜点").add("豌豆黄（100g）");
+        foodNameMapCalorie.put("豌豆黄（100g）", "134大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("藕粉（100g）", "371大卡"));
+        typeMapFoodNames.get("甜点").add("藕粉（100g）");
+        foodNameMapCalorie.put("藕粉（100g）", "371大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("美味香酥卷（100g）", "368大卡"));
+        typeMapFoodNames.get("甜点").add("美味香酥卷（100g）");
+        foodNameMapCalorie.put("美味香酥卷（100g）", "368大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("蜜麻花（100g）", "367大卡"));
+        typeMapFoodNames.get("甜点").add("蜜麻花（100g）");
+        foodNameMapCalorie.put("蜜麻花（100g）", "367大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("桂花藕粉（100g）", "344大卡"));
+        typeMapFoodNames.get("甜点").add("桂花藕粉（100g）");
+        foodNameMapCalorie.put("桂花藕粉（100g）", "344大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("茯苓夹饼（100g）", "332大卡"));
+        typeMapFoodNames.get("甜点").add("茯苓夹饼（100g）");
+        foodNameMapCalorie.put("茯苓夹饼（100g）", "332大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("蛋糕(蒸)（100g）", "320大卡"));
+        typeMapFoodNames.get("甜点").add("蛋糕(蒸)（100g）");
+        foodNameMapCalorie.put("蛋糕(蒸)（100g）", "320大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("栗羊羹（100g）", "300大卡"));
+        typeMapFoodNames.get("甜点").add("栗羊羹（100g）");
+        foodNameMapCalorie.put("栗羊羹（100g）", "300大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("辣油豆瓣酱（100g）", "180大卡"));
+        typeMapFoodNames.get("甜点").add("辣油豆瓣酱（100g）");
+        foodNameMapCalorie.put("辣油豆瓣酱（100g）", "180大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("黄酱（100g）", "140大卡"));
+        typeMapFoodNames.get("甜点").add("黄酱（100g）");
+        foodNameMapCalorie.put("黄酱（100g）", "140大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("甜面酱（100g）", "136大卡"));
+        typeMapFoodNames.get("甜点").add("甜面酱（100g）");
+        foodNameMapCalorie.put("甜面酱（100g）", "136大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("辣酱(麻)（100g）", "135大卡"));
+        typeMapFoodNames.get("甜点").add("辣酱(麻)（100g）");
+        foodNameMapCalorie.put("辣酱(麻)（100g）", "135大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("黄油（100g）", "639-982大卡"));
+        typeMapFoodNames.get("甜点").add("黄油（100g）");
+        foodNameMapCalorie.put("黄油（100g）", "639-982大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("猪油（15ml）", "13g115大卡"));
+        typeMapFoodNames.get("甜点").add("猪油（15ml）");
+        foodNameMapCalorie.put("猪油（15ml）", "13g115大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("人造奶油（15ml）", "100大卡"));
+        typeMapFoodNames.get("甜点").add("人造奶油（15ml）");
+        foodNameMapCalorie.put("人造奶油（15ml）", "100大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("橄榄油（15ml）", "120大卡"));
+        typeMapFoodNames.get("甜点").add("橄榄油（15ml）");
+        foodNameMapCalorie.put("橄榄油（15ml）", "120大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("花生油（15ml）", "120大卡"));
+        typeMapFoodNames.get("甜点").add("花生油（15ml）");
+        foodNameMapCalorie.put("花生油（15ml）", "120大卡");
+        calorieInfo.get("甜点").add(new CalorieInfoItem("水果酱（100g）", "400-880大卡"));
+        typeMapFoodNames.get("甜点").add("水果酱（100g）");
+        foodNameMapCalorie.put("水果酱（100g）", "400-880大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("红茶、咖啡（不加糖、奶精）", "0-1大卡"));
+        typeMapFoodNames.get("饮料").add("红茶、咖啡（不加糖、奶精）");
+        foodNameMapCalorie.put("红茶、咖啡（不加糖、奶精）", "0-1大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("麦乳精", "429/100大卡"));
+        typeMapFoodNames.get("饮料").add("麦乳精");
+        foodNameMapCalorie.put("麦乳精", "429/100大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("啤酒(一罐)", "150大卡"));
+        typeMapFoodNames.get("饮料").add("啤酒(一罐)");
+        foodNameMapCalorie.put("啤酒(一罐)", "150大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("可乐(一罐)", "145大卡"));
+        typeMapFoodNames.get("饮料").add("可乐(一罐)");
+        foodNameMapCalorie.put("可乐(一罐)", "145大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("蕃茄汁(一罐)", "45大卡"));
+        typeMapFoodNames.get("饮料").add("蕃茄汁(一罐)");
+        foodNameMapCalorie.put("蕃茄汁(一罐)", "45大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("苹果汁（一杯）", "120大卡"));
+        typeMapFoodNames.get("饮料").add("苹果汁（一杯）");
+        foodNameMapCalorie.put("苹果汁（一杯）", "120大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("葡萄原汁（一杯）", "395大卡"));
+        typeMapFoodNames.get("饮料").add("葡萄原汁（一杯）");
+        foodNameMapCalorie.put("葡萄原汁（一杯）", "395大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("柠檬原汁（一杯）", "60大卡"));
+        typeMapFoodNames.get("饮料").add("柠檬原汁（一杯）");
+        foodNameMapCalorie.put("柠檬原汁（一杯）", "60大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("汽水（一罐）", "140-150大卡"));
+        typeMapFoodNames.get("饮料").add("汽水（一罐）");
+        foodNameMapCalorie.put("汽水（一罐）", "140-150大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("葡萄酒（一杯120ml)", "95大卡"));
+        typeMapFoodNames.get("饮料").add("葡萄酒（一杯120ml)");
+        foodNameMapCalorie.put("葡萄酒（一杯120ml)", "95大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("绍兴酒(100ml)", "91.6大卡"));
+        typeMapFoodNames.get("饮料").add("绍兴酒(100ml)");
+        foodNameMapCalorie.put("绍兴酒(100ml)", "91.6大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("陈年绍酒(100ml)", "102.8大卡"));
+        typeMapFoodNames.get("饮料").add("陈年绍酒(100ml)");
+        foodNameMapCalorie.put("陈年绍酒(100ml)", "102.8大卡");
+        calorieInfo.get("饮料").add(new CalorieInfoItem("高梁酒(100ml)", "324.8大卡"));
+        typeMapFoodNames.get("饮料").add("高梁酒(100ml)");
+        foodNameMapCalorie.put("高梁酒(100ml)", "324.8大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("巨型MC汉堡BigMac", "560大卡"));
+        typeMapFoodNames.get("高热量").add("巨型MC汉堡BigMac");
+        foodNameMapCalorie.put("巨型MC汉堡BigMac", "560大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("鱼柳汉堡", "560大卡"));
+        typeMapFoodNames.get("高热量").add("鱼柳汉堡");
+        foodNameMapCalorie.put("鱼柳汉堡", "560大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("麦香鱼fellet", "343大卡"));
+        typeMapFoodNames.get("高热量").add("麦香鱼fellet");
+        foodNameMapCalorie.put("麦香鱼fellet", "343大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("麦香鸡", "519大卡"));
+        typeMapFoodNames.get("高热量").add("麦香鸡");
+        foodNameMapCalorie.put("麦香鸡", "519大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("McNuggets(4个)", "190大卡"));
+        typeMapFoodNames.get("高热量").add("McNuggets(4个)");
+        foodNameMapCalorie.put("McNuggets(4个)", "190大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("苹果派", "260大卡"));
+        typeMapFoodNames.get("高热量").add("苹果派");
+        foodNameMapCalorie.put("苹果派", "260大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("M&MMcFlurry", "630大卡"));
+        typeMapFoodNames.get("高热量").add("M&MMcFlurry");
+        foodNameMapCalorie.put("M&MMcFlurry", "630大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("巧克力圣代", "312大卡"));
+        typeMapFoodNames.get("高热量").add("巧克力圣代");
+        foodNameMapCalorie.put("巧克力圣代", "312大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("松饼", "186大卡"));
+        typeMapFoodNames.get("高热量").add("松饼");
+        foodNameMapCalorie.put("松饼", "186大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("蛋塔EggMcMuffin", "290大卡"));
+        typeMapFoodNames.get("高热量").add("蛋塔EggMcMuffin");
+        foodNameMapCalorie.put("蛋塔EggMcMuffin", "290大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("玉米浓汤", "127大卡"));
+        typeMapFoodNames.get("高热量").add("玉米浓汤");
+        foodNameMapCalorie.put("玉米浓汤", "127大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("热巧克力", "138大卡"));
+        typeMapFoodNames.get("高热量").add("热巧克力");
+        foodNameMapCalorie.put("热巧克力", "138大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("鸡块(6块)", "286大卡"));
+        typeMapFoodNames.get("高热量").add("鸡块(6块)");
+        foodNameMapCalorie.put("鸡块(6块)", "286大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("薯条(小)", "205大卡"));
+        typeMapFoodNames.get("高热量").add("薯条(小)");
+        foodNameMapCalorie.put("薯条(小)", "205大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("奶昔", "360大卡"));
+        typeMapFoodNames.get("高热量").add("奶昔");
+        foodNameMapCalorie.put("奶昔", "360大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("橘子汁", "80大卡"));
+        typeMapFoodNames.get("高热量").add("橘子汁");
+        foodNameMapCalorie.put("橘子汁", "80大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("雪碧或者可乐(大杯)", "310大卡"));
+        typeMapFoodNames.get("高热量").add("雪碧或者可乐(大杯)");
+        foodNameMapCalorie.put("雪碧或者可乐(大杯)", "310大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("墨西哥鸡肉卷(1个)", "600大卡"));
+        typeMapFoodNames.get("高热量").add("墨西哥鸡肉卷(1个)");
+        foodNameMapCalorie.put("墨西哥鸡肉卷(1个)", "600大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("玉米汤", "114大卡"));
+        typeMapFoodNames.get("高热量").add("玉米汤");
+        foodNameMapCalorie.put("玉米汤", "114大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("百士吉", "260大卡"));
+        typeMapFoodNames.get("高热量").add("百士吉");
+        foodNameMapCalorie.put("百士吉", "260大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("超级至尊supersupereme（100g）", "238大卡"));
+        typeMapFoodNames.get("高热量").add("超级至尊supersupereme（100g）");
+        foodNameMapCalorie.put("超级至尊supersupereme（100g）", "238大卡");
+        calorieInfo.get("高热量").add(new CalorieInfoItem("田院风光veggie'slove（100g）", "208大卡"));
+        typeMapFoodNames.get("高热量").add("田院风光veggie'slove（100g）");
+        foodNameMapCalorie.put("田院风光veggie'slove（100g）", "208大卡");
+    }
+}

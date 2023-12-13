@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".homepagefragments.MyFragment">
+
+    <RelativeLayout
+        android:id="@+id/topFloorRelative"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        >
+
+        <RelativeLayout
+            android:id="@+id/aboveRelative"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/jianbian3"
+            >
+<!--            android:background="#9ec2f7"-->
+
+            <TextView
+                android:id="@+id/registerTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="注册于:2023-11-17"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="100dp"
+                android:textColor="#ffffff" />
+
+        </RelativeLayout>
+
+        <!-- 后加进来的界面会覆盖在最上面  -->
+        <ImageView
+            android:id="@+id/settingButton"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/setting2" />
+
+        <RelativeLayout
+            android:id="@+id/midRelative"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@id/aboveRelative"
+            android:background="#fcfcfc">
+
+            <RelativeLayout
+                android:id="@+id/usernameLine"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:layout_marginTop="40dp">
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="Goths"
+                    android:textColor="#000000"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:id="@+id/personalitySign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_toRightOf="@+id/username"
+                    android:text="生命不息, 运动不止~"
+                    android:textSize="13dp"
+                    android:textColor="#a1a1a1" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/detailInfoLine"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_below="@id/usernameLine"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="15dp">
+
+                <Button
+                    android:id="@+id/detailInfoButton"
+                    android:layout_width="160dp"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="15dp"
+                    android:textColor="#70c9ab"
+                    android:background="@drawable/button_style_midspace"
+                    android:text="详细资料"
+                    android:textSize="15dp" />
+
+                <Button
+                    android:id="@+id/changePasswordButton"
+                    android:layout_width="160dp"
+                    android:layout_height="100dp"
+                    android:textColor="#70c9ab"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/detailInfoButton"
+                    android:background="@drawable/button_style_midspace"
+                    android:text="修改密码"
+                    android:textSize="15dp" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/my_group_button"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/goto_group"
+                android:layout_toLeftOf="@id/calorie_button"
+                android:layout_marginTop="11dp"
+                android:layout_marginRight="6dp"
+                />
+
+            <ImageView
+                android:id="@+id/calorie_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/calorie"
+                android:layout_toLeftOf="@id/star_button"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="6dp"
+                />
+
+            <ImageView
+                android:id="@+id/star_button"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/star2" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/history_title_line"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/midRelative">
+            <ImageView
+                android:id="@+id/history_image"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/history2"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="14dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="历史运动"
+                android:textColor="#000000"
+                android:textSize="18dp"
+                android:layout_marginLeft="6dp"
+                android:layout_toRightOf="@id/history_image"
+                android:layout_centerVertical="true"
+                />
+
+            <RelativeLayout
+                android:id="@+id/date_picker_layout"
+                android:background="@drawable/button_lunkuo"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="12dp"
+                android:layout_centerVertical="true">
+                <TextView
+                    android:id="@+id/date_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="2023-11-24"
+                    android:textColor="#000000"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/calendar_image"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/date"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/date_text_view"
+                    />
+
+
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/histories_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/history_title_line"
+            android:background="#ffffff"
+            />
+
+        <RelativeLayout
+            android:id="@+id/empty_show"
+            android:layout_below="@id/history_title_line"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/history_empty_logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="60dp"
+                android:src="@drawable/run"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/history_empty_logo"
+                android:layout_centerHorizontal="true"
+                android:textColor="#a1a1a1"
+                android:layout_marginTop="14dp"
+                android:text="还没有任何运动记录奥～"
+                android:textSize="16dp"/>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/head_image"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@drawable/cycle_shape"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="10dp"
+            android:scaleType="centerCrop"/>
+    </RelativeLayout>
+</FrameLayout>
+

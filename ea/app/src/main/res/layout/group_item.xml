@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?><!-- res/layout/group_item.xml -->
+<!-- res/layout/group_item.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/sportTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:text="Sport"
+        android:textColor="@color/white"
+        android:textSize="30sp" /> <!-- 添加间距 -->
+
+    <TextView
+        android:id="@+id/limitTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:text="Joiner Limit" /> <!-- 添加间距 -->
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:text="Time" /> <!-- 添加间距 -->
+
+    <TextView
+        android:id="@+id/createTimeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:text="Create Time" /> <!-- 添加间距 -->
+</LinearLayout>
+

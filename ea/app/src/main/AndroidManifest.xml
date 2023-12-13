@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <application
+        android:name="org.litepal.LitePalApplication"
+        android:allowBackup="true"
+        android:networkSecurityConfig="@xml/network_config"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/my_app_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        tools:targetApi="31">
+        <activity
+            android:name=".sports.CompleteSportActivity"
+            android:exported="false" />
+        <activity android:name=".blog.BlogDetailActivity" />
+        <activity android:name=".blog.BlogNewActivity" />
+        <activity android:name=".blog.SearchResultsBlogActivity"/>
+        <activity android:name=".group.GroupDetailActivity" />
+        <activity android:name=".group.CreateGroupActivity" />
+        <activity android:name=".group.SearchResultsGroupActivity" />
+        <activity android:name=".group.GroupDetailForSearchActivity"/>
+        <activity android:name=".group.MyGroupActivity"/>
+        <activity android:name=".group.GroupDetailForMyActivity"/>
+        <activity android:name=".group.RecommendGroupActivity"/>
+        <activity android:name=".group.GroupDetailForRecActivity"/>
+        <activity
+            android:name=".sports.BallSportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".sports.SwimSportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".sports.TdSportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".sports.FitSportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".sports.WalkSportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".sports.RunSportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".sports.SportkindActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SelectHeadImage"
+            android:exported="false" />
+        <activity
+            android:name=".HomepageActivity"
+            android:exported="false" />
+        <activity android:name=".PersonalInfoActivity" />
+        <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".PersonalSignActivity" />
+        <activity android:name=".AccountSafeActivity" />
+        <activity android:name=".MyStarActivity" />
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".CalorieCheckActivity"/>
+        <activity
+            android:name=".Welcome"
+            android:exported="true"
+            android:launchMode="singleTask">
+
+            <!-- android:configChanges="keyboardHidden" -->
+            <!-- android:screenOrientation="portrait" -->
+            <!-- android:theme="@android:style/Theme.NoTitleBar.Fullscreen" -->
+            <!-- > -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <!-- <category android:name="android.intent.category.HOME"/> -->
+                <!-- <category android:name="android.intent.category.DEFAULT"/> -->
+            </intent-filter>
+        </activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".MainActivity" />
+
+        <!-- 配置 Content Provider -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.buaaexercise.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

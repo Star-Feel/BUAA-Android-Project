@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_shape">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="卡路里检测"
+        android:textColor="#ffffff"
+        android:textSize="24dp"
+        android:paddingTop="12dp"
+        android:paddingLeft="20dp"
+        android:background="#9ec2f7" />
+
+    <ImageView
+        android:id="@+id/cha_button"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:src="@drawable/cha"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="12dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/left_relative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        >
+        <ImageView
+            android:id="@+id/food_type_logo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/food"
+            />
+        <Button
+            android:id="@+id/know_button"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:text="我知道了"
+            android:layout_marginTop="25dp"
+            android:textColor="#ffffff"
+            android:layout_below="@id/food_type_logo"
+            android:background="@drawable/save_button"
+            android:layout_centerHorizontal="true"
+            />
+
+    </RelativeLayout>
+
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/right_relative"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_toRightOf="@id/left_relative"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/select_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择食物类别: "
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="#a1a1a1"/>
+
+        <Spinner
+            android:id="@+id/type_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/select_type"
+            />
+
+        <TextView
+            android:id="@+id/select_food"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/type_spinner"
+            android:text="选择食物: "
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:textColor="#a1a1a1"/>
+
+        <Spinner
+            android:id="@+id/food_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/select_food"/>
+
+        <TextView
+            android:id="@+id/calorie_hint"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/food_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="卡路里: "
+            android:textColor="#a1a1a1"/>
+        <TextView
+            android:id="@+id/calorie_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="150大卡"
+            android:layout_below="@id/calorie_hint"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:textColor="#000000"
+            />
+        <TextView
+            android:id="@+id/tips_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tips: "
+            android:textColor="#a1a1a1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/calorie_value"/>
+
+        <TextView
+            android:id="@+id/tips_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:layout_below="@id/tips_hint"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="12dp"
+            android:paddingRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="肯德基、麦当劳等类型食物中油炸偏多，炸、炒、煎的食物在热量排行榜上基本排在了金字塔的顶端，想要保持身材不发胖，要尽量控制对此类的摄入哦！"/>
+    </RelativeLayout>
+
+
+
+<!--    <Spinner-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/title"/>-->
+
+<!--    <ScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/title"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginBottom="10dp">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/content"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textSize="14dp"-->
+<!--                android:lineSpacingExtra="10dp"-->
+<!--                android:textColor="#6b6b6b"-->
+<!--                android:padding="20dp"-->
+<!--                android:text="      本作品由北航计算机学院2021级的5名本科生于2023年共同开发完成。" />-->
+
+<!--            <Button-->
+<!--                android:id="@+id/button"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="35dp"-->
+<!--                android:paddingLeft="15dp"-->
+<!--                android:paddingRight="15dp"-->
+<!--                android:text="我知道了"-->
+<!--                android:textColor="#ffffff"-->
+<!--                android:background="@drawable/button_buaa_style"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:textSize="16dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginBottom="15dp" />-->
+<!--        </LinearLayout>-->
+<!--    </ScrollView>-->
+
+</RelativeLayout>

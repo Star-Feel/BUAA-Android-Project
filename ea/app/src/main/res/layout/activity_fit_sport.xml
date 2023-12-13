@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color_choose">
+
+    <LinearLayout
+        android:id="@+id/ll_fit_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/timer"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/fit_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:background="@drawable/home_card_style"
+            android:baselineAligned="false"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="根据您的运动情况\n为您推荐以下健身计划"
+            android:textColor="@color/sunny"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="一般强度有氧运动方案——保持健康训练计划"
+            android:textColor="@color/pressed"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:id="@+id/sv_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:text="empty"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </ScrollView>
+
+    </LinearLayout>
+
+
+    <Chronometer
+        android:id="@+id/timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:format="00:00:00"
+        android:gravity="center"
+        android:textSize="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="210dp"/>
+
+    <ImageButton
+        android:id="@+id/btn_start"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:layout_marginLeft="70dp"
+        android:background="@drawable/button_circle"
+        android:src="@drawable/ic_start_button" />
+    <ImageButton
+        android:id="@+id/btn_stop"
+        android:layout_toRightOf="@id/btn_start"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:layout_marginLeft="15dp"
+        android:visibility="gone"
+        android:background="@drawable/button_circle"
+        android:src="@drawable/ic_stop_button" />
+
+    <ImageButton
+        android:id="@+id/btn_pause"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:layout_marginLeft="70dp"
+        android:visibility="invisible"
+        android:background="@drawable/button_circle"
+        android:src="@drawable/ic_pause_button" />
+
+</RelativeLayout>

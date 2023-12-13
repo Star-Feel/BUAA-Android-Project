@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    >
+    <ImageView
+        android:id="@+id/history_item_image"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/background_register"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/cycle_shape"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/history_item_title"
+        android:layout_toRightOf="@id/history_item_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textColor="#000000"
+        android:text="跑步"
+        android:textSize="17dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="15dp" />
+
+    <TextView
+        android:id="@+id/history_item_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="还没有备注哦 ~"
+        android:layout_below="@id/history_item_title"
+        android:textSize="12dp"
+        android:textColor="#a1a1a1"
+        android:layout_toRightOf="@id/history_item_image"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"/>
+
+    <TextView
+        android:id="@+id/history_item_total_time"
+        android:layout_toRightOf="@id/history_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:gravity="center_vertical"
+        android:textColor="#000000"
+        android:background="@drawable/text_shape_blue"
+        android:text="189 min"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textSize="9dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginLeft="8dp" />
+
+    <TextView
+        android:id="@+id/history_item_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#a1a1a1"
+        android:text="12:23"
+        android:textSize="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="#ECEEF0"
+        android:layout_height="1dp"/>
+
+</RelativeLayout>
